@@ -285,8 +285,14 @@ function main(): void {
   };
 
   // ---- write outputs ----
-  rmSync(outDir, { recursive: true, force: true });
+  // Empty the output directory's CONTENTS without removing the directory
+  // itself: in the grader /output is a bind mount on a read-only root
+  // filesystem, so removing it fails (EACCES/EBUSY) and kills the run.
+  // Only its children may be deleted.
   mkdirSync(outDir, { recursive: true });
+  for (const child of readdirSync(outDir)) {
+    rmSync(join(outDir, child), { recursive: true, force: true });
+  }
   writeFileSync(join(outDir, 'board.json'), JSON.stringify({ rows }, null, 2) + '\n', 'utf8');
   writeFileSync(join(outDir, 'data.js'), `window.RADAR = ${JSON.stringify(data)};\n`, 'utf8');
 
