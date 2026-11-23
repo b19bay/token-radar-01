@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launch Radar — comps-fitted token launch radar</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>LAUNCH RADAR</h1>
+    <p class="tag">Comps-fitted token launch radar &mdash; walk-forward + held-out tested</p>
+  </div>
+  <div class="asof" id="asof"></div>
+</header>
+
+<section class="strip" id="validStrip" aria-label="Validation"></section>
+
+<section class="kpis" id="kpis" aria-label="Coverage"></section>
+
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-tab="board" role="tab">Board</button>
+  <button class="tab" data-tab="live" role="tab">Live tokens</button>
+  <button class="tab" data-tab="method" role="tab">Method</button>
+</nav>
+
+<main>
+  <section id="tab-board" class="pane active">
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search protocol or slug&hellip;" aria-label="Search protocols">
+      <select id="category" aria-label="Filter by category"><option value="">All categories</option></select>
+      <label class="check"><input id="watchOnly" type="checkbox"> Watchlist only</label>
+      <span class="count" id="rowCount"></span>
+    </div>
+    <div class="tablewrap">
+      <table id="boardTable">
+        <thead>
+          <tr>
+            <th data-sort="rank" class="num sorted">Rank</th>
+            <th data-sort="name">Protocol</th>
+            <th data-sort="category">Category</th>
+            <th data-sort="chains">Chains</th>
+            <th data-sort="tvl_usd" class="num">TVL</th>
+            <th data-sort="change_7d" class="num">7d</th>
+            <th data-sort="age_days" class="num">Age</th>
+            <th data-sort="token_odds" class="num">Token odds</th>
+            <th data-sort="implied_value_usd" class="num">Implied value</th>
+          </tr>
+        </thead>
+        <tbody id="boardBody"></tbody>
+      </table>
+    </div>
+    <p class="hint">Click a row for the protocol&rsquo;s detail view: model breakdown, farm plan and comparables.</p>
+    <article id="detail" class="detail" hidden></article>
+  </section>
+
+  <section id="tab-live" class="pane">
+    <p class="lede">Protocols whose token already trades, at the market&rsquo;s own value. They are not ranked on the board &mdash; the board is for launches still to come.</p>
+    <div class="tablewrap">
+      <table id="liveTable">
+        <thead>
+          <tr>
+            <th>Protocol</th><th>Category</th><th>Chains</th>
+            <th class="num">TVL</th><th class="num">Market cap</th><th class="num">Mcap / TVL</th><th class="num">7d</th>
+          </tr>
+        </thead>
+        <tbody id="liveBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="tab-method" class="pane">
+    <h2>How the radar scores</h2>
+    <p>Implied value = TVL &times; comps multiple &times; growth &times; tenure &times; token odds. The comps multiple is the median market-cap-to-TVL ratio of traded protocols in the same category (global median when a category has fewer than four traded peers), clipped to 0.02&ndash;3.0. Token odds are the share of protocols in the category that already record a token, shrunk toward the global rate. Growth is the seven-day TVL change clamped to &minus;50&hellip;+100%, weighted 0.55. Tenure rises from 0.70 to 1.00 over four years listed. No protocol name is ever special-cased: the same function scores every row.</p>
+    <h2>Validation, as measured</h2>
+    <div id="validTable"></div>
+    <p class="note">Read honestly: the comps multiple is a weak predictor &mdash; a typical error is a factor of about four. The multiples still separate protocols, and the board ranks on the fitted value, not on a claim of precision.</p>
+    <h2>Coverage</h2>
+    <p id="coverageText"></p>
+    <h2>What a token would be worth</h2>
+    <p>A protocol&rsquo;s launch is the token it may issue one day. The board states what that token would be worth if the protocol&rsquo;s record stayed as it is. It does not predict whether or when a token is issued. A protocol that records no token may still have one its DefiLlama record does not carry.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Launch Radar &middot; model comps-1 &middot; snapshot as of <span id="footDate"></span> &middot; source: DefiLlama public API &middot; values are the radar&rsquo;s own claims, never make.fun&rsquo;s.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
